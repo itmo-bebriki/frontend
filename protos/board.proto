@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option csharp_namespace = "Itmo.Bebriki.Boards.Kafka.Contracts";
+
+package itmo.bebriki.boards.kafka;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+message BoardInfoKey {
+  int64 board_id = 1;
+}
+
+message BoardInfoValue {
+  oneof event {
+    BoardCreated board_created = 1;
+    BoardUpdated board_updated = 2;
+    BoardTopicsAdded board_topics_added = 3;
+    BoardTopicsRemoved board_topics_removed = 4;
+  }
+  
+  message BoardCreated {
+    int64 board_id = 1;
+    string name = 2;
+    string description = 3;
+    repeated int64 topic_ids = 4;
+    google.protobuf.Timestamp created_at = 5;
+  }
+  
+  message BoardUpdated {
+    int64 board_id = 1;
+    google.protobuf.StringValue name = 2;
+    google.protobuf.StringValue description = 3;
+    google.protobuf.Timestamp updated_at = 4;
+  }
+  
+  message BoardTopicsAdded {
+    int64 board_id = 1;
+    repeated int64 added_topics = 2;
+  }
+  
+  message BoardTopicsRemoved {
+    int64 board_id = 1;
+    repeated int64 removed_topics = 2;
+  }
+}

@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+option csharp_namespace = "Itmo.Bebriki.Topics.Kafka.Contracts";
+
+package itmo.bebriki.topics.kafka;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+message TopicInfoKey {
+  int64 topic_id = 1;
+}
+
+message TopicInfoValue {
+  oneof event {
+    TopicCreated topic_created = 1;
+    TopicUpdated topic_updated = 2;
+    TopicTasksAdded topic_tasks_added = 3;
+    TopicTasksRemoved topic_tasks_removed = 4;
+  }
+
+  message TopicCreated {
+    int64 topic_id = 1;
+    string name = 2;
+    string description = 3;
+    repeated int64 task_ids = 4;
+    google.protobuf.Timestamp created_at = 5;
+  }
+
+  message TopicUpdated {
+    int64 topic_id = 1;
+    google.protobuf.StringValue name = 2;
+    google.protobuf.StringValue description = 3;
+    google.protobuf.Timestamp updated_at = 4;
+  }
+
+  message TopicTasksAdded {
+    int64 topic_id = 1;
+    repeated int64 added_tasks = 2;
+  }
+
+  message TopicTasksRemoved {
+    int64 topic_id = 1;
+    repeated int64 removed_tasks = 2;
+  }
+}
